@@ -10,7 +10,8 @@
     "Vue.js",
     "plugin",
     "drag",
-    "drag and move"
+    "drag and move",
+    "resizable"
   ],
   "author": "Andrew",
   "license": "ISC"
