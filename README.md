@@ -30,4 +30,4 @@ set the css property `width` and `height` to limit the space that maybe be manip
 | onShapeResize  | the new size、position of shape | when shape has been resized |
 | onShapeDraw  | the new size、position of shape | when a new shape created |
 ## Examples
-you can checkout [Demo](https://github.com/senchalabs/connect/) here
+you can checkout [Demo](https://anderlaw.github.io/v-drag/example/index.html) here
