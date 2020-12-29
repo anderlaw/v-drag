@@ -1,7 +1,7 @@
 <template>
   <div class="root">
     <div
-      v-show="selectVisible"
+      v-show="visible"
       class="select-frame"
       v-bind:style="{
         width: width + 'px',
@@ -43,19 +43,19 @@ export default {
   props: {
     selectWidth: Number,
     selectHeight: Number,
-    selectVisible: Boolean,
+    visible: Boolean,
     offsetLeft: Number,
     offsetTop: Number,
-    allowDraw: Boolean,
+    drawEnable: Boolean,
   },
   data() {
     return {
       workWidth: 0,
       workHeight: 0,
-      width: 0,
-      height: 0,
-      left: 0,
-      top: 0,
+      width: this.selectWidth || 0,
+      height:this.selectHeight || 0,
+      left: this.offsetLeft || 0,
+      top: this.offsetTop || 0,
     };
   },
   watch: {
@@ -148,6 +148,12 @@ export default {
           }
           break;
       }
+      this.$emit("onShapeResize", {
+        width: this.width,
+        height: this.height,
+        left: this.left,
+        top: this.top,
+      });
     },
     /**
      * @resizeType top-left,top-right,bottom-right,bottom-left
@@ -258,6 +264,12 @@ export default {
           }
           break;
       }
+      this.$emit("onShapeResize", {
+        width: this.width,
+        height: this.height,
+        left: this.left,
+        top: this.top,
+      });
     },
     /**
      * @offsetObject { offsetX,offsetY }
@@ -286,6 +298,14 @@ export default {
       } else {
         this.top = cacheProps.cacheTop + offsetObject.offsetY;
       }
+
+      //emit position changed event
+      this.$emit("onShapeDrag", {
+        width: this.width,
+        height: this.height,
+        left: this.left,
+        top: this.top,
+      });
     },
     registerDrawSelectEvent() {
       this.$el.addEventListener("mousedown", (outerEvent) => {
@@ -295,7 +315,7 @@ export default {
           return;
         }
         //return if allowDraw not allowed!
-        if (!this.allowDraw) {
+        if (!this.drawEnable) {
           return;
         }
 
@@ -318,7 +338,7 @@ export default {
           document.removeEventListener("mousemove", moveFn);
           document.removeEventListener("mouseup", upFn);
           this.$el.removeEventListener("mouseup", upFn);
-          this.$emit("onDraw", {
+          this.$emit("onShapeDraw", {
             width: this.width,
             height: this.height,
             left: this.left,
@@ -418,14 +438,6 @@ export default {
               .querySelector(".handle-box")
               .removeEventListener("mouseup", mouseUpFn);
             document.removeEventListener("mouseup", mouseUpFn);
-
-            //emit size or position changed event
-            this.$emit("onChange", {
-              width: this.width,
-              height: this.height,
-              left: this.left,
-              top: this.top,
-            });
           };
 
           document.addEventListener("mousemove", mouseMoveFn);
@@ -448,104 +460,6 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
-.root {
-  position: relative;
-  border: 1px solid #ccc;
-  .select-frame {
-    cursor: move;
-    position: absolute;
-    .dashed-line {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      [class^="inner-line"] {
-        position: absolute;
-        background-color: #ccc;
-      }
-      .inner-line-v1 {
-        left: 33.33%;
-        width: 1px;
-        height: 100%;
-      }
-      .inner-line-v2 {
-        left: 66.66%;
-        width: 1px;
-        height: 100%;
-      }
-      .inner-line-h1 {
-        top: 33.33%;
-        height: 1px;
-        width: 100%;
-      }
-      .inner-line-h2 {
-        top: 66.66%;
-        height: 1px;
-        width: 100%;
-      }
-    }
-    .handle-box {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      box-sizing: border-box;
-      border: 1px solid #39f;
-      .resize-line {
-        position: absolute;
-        opacity: 0.1;
-        background-color: #39f;
-        &.left {
-          width: 7px;
-          height: 100%;
-          left: -4px;
-          cursor: ew-resize;
-        }
-        &.right {
-          width: 7px;
-          height: 100%;
-          right: -4px;
-          cursor: ew-resize;
-        }
-        &.top {
-          height: 7px;
-          width: 100%;
-          top: -4px;
-          cursor: ns-resize;
-        }
-        &.bottom {
-          height: 7px;
-          width: 100%;
-          bottom: -4px;
-          cursor: ns-resize;
-        }
-      }
-      .resize-corner {
-        position: absolute;
-        width: 7px;
-        height: 7px;
-        background-color: #39f;
-        &.top-left {
-          left: -4px;
-          top: -4px;
-          cursor: nwse-resize;
-        }
-        &.top-right {
-          right: -4px;
-          top: -4px;
-          cursor: nesw-resize;
-        }
-        &.bottom-left {
-          left: -4px;
-          bottom: -4px;
-          cursor: nesw-resize;
-        }
-        &.bottom-right {
-          right: -4px;
-          bottom: -4px;
-          cursor: nwse-resize;
-        }
-      }
-    }
-  }
-}
+<style scoped>
+@import url("./v-drag.css");
 </style>
