@@ -1,6 +1,6 @@
 {
   "name": "vue-drag-plugin",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "A userful Vue.js based drag plugin",
   "main": "index.js",
   "scripts": {
