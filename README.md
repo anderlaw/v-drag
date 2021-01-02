@@ -1,4 +1,8 @@
 # A Vue.js drag plugin
+## Support
+- Vue.js : `2.x`
+- Browser: only work in Desktop browser,will consider Mobile browser in the future version
+
 ## Installation
 `npm i vue-drag-plugin`
 ## Usage
